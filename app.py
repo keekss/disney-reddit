@@ -65,25 +65,39 @@ def image_graph_container(image):
         className = 'graph-container'
     )
 
+ride_map_container = dbc.Row(
+    html.Iframe(
+        id = 'ride_map',
+        srcDoc = open('ride_map.html', 'r').read(),
+        width = '100%',
+        height = '850',
+        className = 'graph',
+    ), className = 'graph-container',
+)
+
 tab_labels = [
-    '0: Stock Prices vs. Time',
-    '1: Post Scores vs. Time',
-    '2: Number of Comments vs. Time',
-    '3a: Stock Prices vs. Post Scores',
-    '3b: Stock Prices vs. Number of Comments',
-    '4a: Stock Price vs. Post Sentiment',
-    '4b: Stock Price vs. Comment Sentiment',
+    '1: Map of DisneyLand Ride Sentiment',
+    '2: Character Mentions',
+    '3: Stock Prices vs. Time',
+    '4: Post Scores vs. Time',
+    '5: Number of Comments vs. Time',
+    '6a: Stock Prices vs. Post Scores',
+    '6b: Stock Prices vs. Number of Comments',
+    '7a: Stock Price vs. Post Sentiment',
+    '7b: Stock Price vs. Comment Sentiment',
 ]
 
 # Access tab content via dictionary with callback
 tab_content = dict(
-    t0 = fig_graph_container(stock_prices_fig),
-    t1 = fig_graph_container(post_scores_fig),
-    t2 = fig_graph_container(comments_fig),
-    t3a = image_graph_container('stock_post_reg.png'),
-    t3b = image_graph_container('stock_comment_reg.png'),
-    t4a = image_graph_container('post_sentiment.png'),
-    t4b = image_graph_container('comment_sentiment.png'),
+    ride_map = ride_map_container,
+    character_mentions = image_graph_container('characters_chart.png'),
+    stock_prices = fig_graph_container(stock_prices_fig),
+    post_scores = fig_graph_container(post_scores_fig),
+    comments = fig_graph_container(comments_fig),
+    stock_post_reg = image_graph_container('stock_post_reg.png'),
+    stock_comment_reg = image_graph_container('stock_comment_reg.png'),
+    post_sentiment = image_graph_container('post_sentiment.png'),
+    comment_sentiment = image_graph_container('comment_sentiment.png'),
 )
 
 # Package each tab in a dcc.Tab
@@ -224,7 +238,7 @@ app.layout = dbc.Container(fluid = True, children = [
               Input('tabs', 'value'))
 def render_content(tab):
     if tab == 'tab-1':
-        return tab_content['t0']
+        return tab_content['ride_map']
     else:
         return tab_content[str(tab)]
 
