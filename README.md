@@ -6,7 +6,7 @@ The first part of this project is a python notebook consisting of a pipeline to 
 analysis on the content, then graph the two datasets. This notebook is fairly robust - each process takes in an iput file and writes to an output 
 file, allowing you to enter the pipeline at any point and checkpoint as you go. 
 
-All of the necessary code for this can be found in [this notebook](https://github.com/keekss/disney-reddit), 
+All of the necessary code for this can be found in [this notebook](https://github.com/keekss/disney-reddit/blob/master/project_writeup.ipynb), 
 which can be run as a Jupyter notebook on a local machine.
 
 The final section of the notebook contains driver code to reconstruct our sample graphs using prepared data files, which can be found in the 
