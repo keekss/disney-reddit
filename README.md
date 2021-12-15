@@ -50,7 +50,7 @@ python3 app.py
 
 At this point you will need to pip install all libraries that you get an error for.
 
-Finally, view the following url in your browswer:
+Finally, run the app again and view the following url in your browswer:
 
 ```
 http://localhost:8050/
