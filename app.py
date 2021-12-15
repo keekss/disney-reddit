@@ -45,6 +45,8 @@ def load_fig(name):
 stock_prices_fig = load_fig('stock_prices')
 post_scores_fig = load_fig('post_scores')
 comments_fig = load_fig('comments')
+post_sentiment_fig = load_fig('post_sentiment')
+comment_sentiment_fig = load_fig('comment_sentiment')
 
 # Package loaded figs
 def fig_graph_container(fig):
@@ -96,8 +98,8 @@ tab_content = dict(
     comments = fig_graph_container(comments_fig),
     stock_post_reg = image_graph_container('stock_post_reg.png'),
     stock_comment_reg = image_graph_container('stock_comment_reg.png'),
-    post_sentiment = image_graph_container('post_sentiment.png'),
-    comment_sentiment = image_graph_container('comment_sentiment.png'),
+    post_sentiment = fig_graph_container(post_sentiment_fig),
+    comment_sentiment = fig_graph_container(comment_sentiment_fig),
 )
 
 # Package each tab in a dcc.Tab
