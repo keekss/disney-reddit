@@ -53,7 +53,7 @@ At this point you will need to pip install all libraries that you get an error f
 Finally, view the following url in your browswer:
 
 ```
-localhost:3030
+http://localhost:8050/
 ```
 
 Alternatively, you can email <clark37@hawaii.edu> to schedule a viewing.
