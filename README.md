@@ -48,6 +48,8 @@ Run the python program (note: make sure python3 is installed on your computer):
 python3 app.py
 ```
 
+At this point you will need to pip install all libraries that you get an error for.
+
 Finally, view the following url in your browswer:
 
 ```
