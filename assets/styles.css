@@ -24,37 +24,35 @@ Section {
     padding: 6px 6px 6px 6px;
     border-style: ridge;
     border-width: 3px;
-    min-height: 158px;
+    min-height: 182px;
 }
 
 #main-title {
-    font-size: 60px;
-    margin-top: 20px;
-}
-
-#subtitle {
-    margin-top: 12px;
+    font-size: 54px;
+    margin-top: 4px;
 }
 
 #extra-info-dropdown {
     font-family: Avenir;
     font-size: 14px;
     margin: auto;
-    vertical-align: center;
+    text-align: center;
     color: var(--disney-dark-blue);
-    padding: 2px;
     padding-left: 10px;
-    padding-top: 8px;
+    padding-top: 16px;
 }
 
 #extra-info-text {
-    padding-top: 12px;
+    padding-top: 14px;
     width: 90%;
     margin: auto;
     vertical-align: center;
 }
 
 .graph {
+    height: 100%;
+    width: auto;
+    margin: auto;
     border-style: solid;
     border-width: 3px;
     border-color: whitesmoke;
@@ -62,15 +60,10 @@ Section {
     padding-left: 10px;
 }
 
-.image {
-    border-style: solid;
-    border-width: 3px;
-    border-color: whitesmoke;
-    width: 95%
-}
-
 .graph-container {
-    width: 95%;
+    background-color: whitesmoke;
+    height: 850px;
+    width: 100%;
     margin: auto;
 }
 
