@@ -42,10 +42,16 @@ After cloning, navigate into the repository's directory:
 cd disney-reddit
 ```
 
-Finally, run the python program (note: make sure python3 is installed on your computer):
+Run the python program (note: make sure python3 is installed on your computer):
 
 ```
 python3 app.py
+```
+
+Finally, view the following url in your browswer:
+
+```
+localhost:3030
 ```
 
 Alternatively, you can email <clark37@hawaii.edu> to schedule a viewing.
