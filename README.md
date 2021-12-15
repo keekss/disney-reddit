@@ -64,7 +64,7 @@ The docker image creates a docker container that runs the applicaiton and jupyte
 
 The container is built on a slim-python build and the neccesary python packages.  All of these required files are loaded automatically in to the container by the image.
 
-To retrieve the docker image in your terminal enter:
+To retrieve the docker image from DockerHub, in your terminal enter:
 
 ```
 docker pull fredstraub22/disney_datascience_analysis_app
