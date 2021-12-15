@@ -1,18 +1,12 @@
 # Run with terminal command 'python3 app.py' from main project directory
 # View at http://127.0.0.1:8050/ in your web browser
 
+# See project_writeup.ipynb for full details
+
 # Note: you may need to install additional libraries, e.g.:
 ## dash
 ## dash_bootstrap_components
 ## dash_daq
-
-import pickle
-
-graphs = dict()
-    
-
-post_scores_file = open('graphs/post_scores.txt', 'rb')
-post_scores_graph = pickle.load(post_scores_file)
 
 import pandas as pd
 from pandas.core.base import SelectionMixin
@@ -38,20 +32,111 @@ from plotly.subplots import make_subplots
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.SLATE])
 
+import pickle
+
+# Load fig object saved from project_writeup.ipynb
+def load_fig(name):
+    file_path = 'graphs/' + name + '.txt'
+    f = open(file_path, 'rb')
+    graph = pickle.load(f)
+    f.close()
+    return graph
+
+stock_prices_fig = load_fig('stock_prices')
+post_scores_fig = load_fig('post_scores')
+comments_fig = load_fig('comments')
+
+# Package loaded figs
+def fig_graph_container(fig):
+    return dbc.Row(
+        dcc.Graph(
+            figure = fig,
+            className = 'graph'
+        ), className = 'graph-container'
+    )
+
+# Package images from assets folder
+def image_graph_container(image):
+    return dbc.Row(
+        html.Img(
+            src=app.get_asset_url(image),
+            className = 'graph'
+        ),
+        className = 'graph-container'
+    )
+
+tab_labels = [
+    '0: Stock Prices vs. Time',
+    '1: Post Scores vs. Time',
+    '2: Number of Comments vs. Time',
+    '3a: Stock Prices vs. Post Scores',
+    '3b: Stock Prices vs. Number of Comments',
+    '4a: Stock Price vs. Post Sentiment',
+    '4b: Stock Price vs. Comment Sentiment',
+]
+
+# Access tab content via dictionary with callback
+tab_content = dict(
+    t0 = fig_graph_container(stock_prices_fig),
+    t1 = fig_graph_container(post_scores_fig),
+    t2 = fig_graph_container(comments_fig),
+    t3a = image_graph_container('stock_post_reg.png'),
+    t3b = image_graph_container('stock_comment_reg.png'),
+    t4a = image_graph_container('post_sentiment.png'),
+    t4b = image_graph_container('comment_sentiment.png'),
+)
+
+# Package each tab in a dcc.Tab
+tab_containers = []
+for label, value in zip(tab_labels, list(tab_content.keys())):
+    tab_containers.append(
+        dcc.Tab(
+            label = label,
+            value = value,
+            className = 'graph-tab'
+        )
+    )
+
 disney_dark_blue_hex = '#10194A'
 
-def graph_tab(name, number):
-    return dcc.Tab(
-        label = name,
-        value = 'tab-' + str(number),
-        className = 'graph-tab',
-    ),
-
-graph_file_names = [
-    'ticker_plot_dis.png',
-    'subreddit_post_scores.png',
-    'linear_regressions.png'
-]
+extra_info_dict = dict(
+    writeup = [
+        'All data processing and methodologies are detailed in a Jupyter Notebook',
+        html.Br(),
+        'Visualizations are included in-line.',
+        html.Br(),
+        dcc.Link(
+            'View the Project Writeup',
+            href='https://github.com/keekss/disney-reddit/blob/master/438%20Final%20Report.ipynb',
+            style = dict(color = disney_dark_blue_hex),
+        )
+    ],
+    pmaw = [
+        'PMAW (Pushshift Multithread API Wrapper) uses the Pushshift API (see \"Pushshift\" info) to multithread ineractions of Pushshift endpoints to improve performance.  ',
+        dcc.Link(
+            'View the GitHub Repository',
+            href='https://github.com/mattpodolak/pmaw',
+            style = dict(color = disney_dark_blue_hex),
+        )
+    ],
+    pushshift = [
+        'Pushshift allows users to search Reddit.com posts and comments based on various criteria, such as keywords, creation date, and score.  ',
+        html.Br(),
+        dcc.Link(
+            'View the GitHub Repository',
+            href='https://github.com/pushshift/api',
+            style = dict(color = disney_dark_blue_hex),
+        )
+    ],
+    yfinance = [
+        'yfinance allows users to access market data from Yahoo Finance, one of the leading financial media services.  Our group used yfinance to pull historical stock price data.  ',
+        dcc.Link(
+            'View the PyPI Project Page',
+            href='https://pypi.org/project/yfinance/',
+            style = dict(color = disney_dark_blue_hex),
+        )
+    ],
+)
 
 app.layout = dbc.Container(fluid = True, children = [
     dbc.Container(fluid = True, children = [
@@ -121,277 +206,27 @@ app.layout = dbc.Container(fluid = True, children = [
     ]),
     dbc.Container(fluid = True, children = [
         dcc.Tabs(
-        id = 'tabs',
-        colors = dict(
-            primary = 'black',
-            background = '#393F8F',
-            border = 'whitesmoke'
+            id = 'tabs',
+            colors = dict(
+                primary = 'black',
+                background = '#393F8F',
+                border = 'whitesmoke'
+            ),
+            children = tab_containers,
+            vertical = True,
+            parent_style = dict(float = 'left')
         ),
-        children = [
-            dcc.Tab(
-                label = '1: Disney Stock Prices',
-                value = 'tab-1',
-                className = 'graph-tab',
-            ),
-            dcc.Tab(
-                label = '2: Subreddit Post Scores',
-                value = 'tab-2',
-                className = 'graph-tab',
-
-            ),
-            dcc.Tab(
-                label = '3A: Post Sentiment & Stock Price', 
-                value = 'tab-3a',
-                className = 'graph-tab',
-
-            ),
-            dcc.Tab(
-                label = '3B: Comment Sentiment & Stock Price', 
-                value = 'tab-3b',
-                className = 'graph-tab',
-
-            ),
-        ]),
-        html.Div(id = 'tabs-content')    
+        html.Div(id = 'tabs-content', style = dict(float = 'left'))
     ]),
 ])
-
-graph_font = dict(
-    family = 'Avenir',
-    size = 24,
-)
-
-def graph_container(image_file_path):
-    return dbc.Row(
-        html.Img(
-            src=app.get_asset_url(image_file_path),
-            className = 'graph'
-        ),
-        className = 'graph-container'
-    )
-
-tab_1 = dbc.Row(post_scores_graph)
-# tab_1 = graph_container('ticker_plot_dis.png')
-
-tab_2 = dbc.Row()
-
-tab_3 = graph_container('linear_regressions.png')
-
-# tab_2 = dbc.Row(
-#     html.Img(
-#         src=app.get_asset_url('ticker_plot_dis.png'),
-#         className = 'graph'
-#     ),
-#     className = 'graph-container'
-# )
-
-# # Tab 2: Disneyland Ride Sentiments
-
-# from sklearn import preprocessing
-# import folium
-# import branca
-# import branca.colormap as cm
-
-# df_rides = pd.read_csv("./sampleData/disneyland_rides_lat_long_w_sentiment.csv")
-
-# #create a map object
-# map = folium.Map(location=[33.8121, -117.9190], zoom_start=18)
-
-# loc = 'Reddit sentiments shown by ride location, normalized between 0 and 1'
-# title_html = '''
-#              <h3 align="center" style="font-size:32px;font-family:Avenir"><b>{}</b></h3>
-#              '''.format(loc) 
-# map.get_root().html.add_child(folium.Element(title_html))
-
-# #create a feature group
-# fg = folium.FeatureGroup(name="Disneyland Attractions")
-
-# #read in the data
-# # data = pd.read_csv("disneyland_attractions.csv")
-# data = df_rides
-
-# colormap = cm.LinearColormap(
-#     colors=['red','green'],
-#     index=[0,1],vmin=0,vmax=1
-# )
-
-# #iterate through the dataframe and add each attraction to the feature group
-# for index, row in data.iterrows():
-#     fg.add_child(folium.Marker(
-#         location=[row["lat"], row["long"]], 
-#         popup="{} : {}".format(row["ride"].upper(), round(row['sentiment'], 2)), 
-#         icon=folium.Icon(color="black", icon_color=colormap(row['sentiment'])))
-#     )
-
-# map.add_child(colormap)
-    
-# #add the feature group to the map
-# map.add_child(fg)
-
-# ride_map = map.save('ride_map.html')
-
-# ride_map_frame = html.Iframe(
-#     id = 'ride_map',
-#     srcDoc = open('ride_map.html', 'r').read(),
-#     width = '100%',
-#     height = '850'
-# )
-
-# tab_2 = dbc.Row([
-#     ride_map_frame
-# ])
-
-# # Tab 3A
-# ps_df = pd.read_csv('sampleData/SMOOTHED_POST_SENTIMENT.csv')
-# ps = ps_df['Sentiment']
-# ps_dates = ps_df['Date']
-
-# pp_df = pd.read_csv('sampleData/POST_FINANCE.csv')
-# pp_raw = pp_df['Close_Price']
-# # Take natural log
-# pp = np.log(pp_raw)
-# pp_dates = pp_df['Date']
-
-# post_fig = make_subplots(specs=[[{"secondary_y": True}]])
-
-# post_fig.add_trace(
-#     go.Scatter(
-#         x = ps_dates,
-#         y = ps,
-#         name = 'Post Sentiment',
-#     ),
-#     secondary_y = False
-# )
-
-# post_fig.add_trace(
-#     go.Scatter(
-#         x = pp_dates,
-#         y = pp,
-#         name = 'Natural Log of Stock Price',
-#     ),
-#     secondary_y = True
-# )
-
-# post_fig.update_layout(
-#     title_text = 'Post Sentiment & Stock Price vs. Time',
-#     xaxis_title = 'Date',
-#     title_x = 0.5,
-#     height = 850,
-#     yaxis_showgrid = False,
-#     font = graph_font,
-# )
-
-# post_fig.update_yaxes(
-#     title_text='Sentiment (5 = Highest; 1 = Lowest)',
-#     tickformat = ".2f", showgrid = False,
-#     secondary_y=False,
-# )
-# post_fig.update_yaxes(title_text='Natural Log of Stock Price (USD)', tickformat = ".1f", showgrid = False, secondary_y=True,)
-
-
-# tab_3a = dbc.Row([
-#     dcc.Graph(figure = post_fig)
-# ])
-
-# # Tab 3B
-# cs_df = pd.read_csv('sampleData/SMOOTHED_COMMENT_SENTIMENT.csv')
-# cs = cs_df['Sentiment']
-# cs_dates = cs_df['Date']
-
-# cp_df = pd.read_csv('sampleData/COMMENT_FINANCE.csv')
-# cp_raw = cp_df['Price']
-# # Take natural log
-# cp = np.log(cp_raw)
-# cp = np.round(cp, 2)
-# cp_dates = cp_df['Date']
-
-# comment_fig = make_subplots(specs=[[{"secondary_y": True}]])
-
-# comment_fig.add_trace(
-#     go.Scatter(
-#         x = cs_dates,
-#         y = cs,
-#         name = 'Comment Sentiment',
-#     ),
-#     secondary_y = False
-# )
-
-# comment_fig.add_trace(
-#     go.Scatter(
-#         x = cp_dates,
-#         y = cp,
-#         name = 'Natural Log of Stock Price',
-#     ),
-#     secondary_y = True
-# )
-
-# comment_fig.update_layout(
-#     title_text = 'Comment Sentiment & Stock Price vs. Time',
-#     xaxis_title = 'Date',
-#     title_x = 0.5,
-#     height = 850,
-#     yaxis_showgrid = False,
-#     font = graph_font,
-# )
-
-# comment_fig.update_yaxes(title_text='Sentiment (5 = Highest; 1 = Lowest)', tickformat = ".2f", showgrid = False, secondary_y=False)
-# comment_fig.update_yaxes(title_text='Natural Log of Stock Price (USD)', tickformat = ".1f", showgrid = False, secondary_y=True)
-
-
-# tab_3b = dbc.Row([
-#     dcc.Graph(figure = comment_fig)
-# ])
 
 @app.callback(Output('tabs-content', 'children'),
               Input('tabs', 'value'))
 def render_content(tab):
     if tab == 'tab-1':
-        return tab_1
-    elif tab == 'tab-2':
-        return tab_2
-    elif tab == 'tab-3a':
-        return tab_3a
-    elif tab == 'tab-3b':
-        return tab_3b
-
-extra_info_dict = dict(
-    writeup = [
-        'All data processing and methodologies are detailed in a Jupyter Notebook',
-        html.Br(),
-        'Visualizations are included in-line.',
-        html.Br(),
-        dcc.Link(
-            'View the Project Writeup',
-            href='https://github.com/keekss/disney-reddit/blob/master/438%20Final%20Report.ipynb',
-            style = dict(color = disney_dark_blue_hex),
-        )
-    ],
-    pmaw = [
-        'PMAW (Pushshift Multithread API Wrapper) uses the Pushshift API (see \"Pushshift\" info) to multithread ineractions of Pushshift endpoints to improve performance.  ',
-        dcc.Link(
-            'View the GitHub Repository',
-            href='https://github.com/mattpodolak/pmaw',
-            style = dict(color = disney_dark_blue_hex),
-        )
-    ],
-    pushshift = [
-        'Pushshift allows users to search Reddit.com posts and comments based on various criteria, such as keywords, creation date, and score.  ',
-        html.Br(),
-        dcc.Link(
-            'View the GitHub Repository',
-            href='https://github.com/pushshift/api',
-            style = dict(color = disney_dark_blue_hex),
-        )
-    ],
-    yfinance = [
-        'yfinance allows users to access market data from Yahoo Finance, one of the leading financial media services.  Our group used yfinance to pull historical stock price data.  ',
-        dcc.Link(
-            'View the PyPI Project Page',
-            href='https://pypi.org/project/yfinance/',
-            style = dict(color = disney_dark_blue_hex),
-        )
-    ],
-)
+        return tab_content['t0']
+    else:
+        return tab_content[str(tab)]
 
 @app.callback(
    Output('extra-info-text', 'children'),

@@ -50,26 +50,24 @@ Section {
 }
 
 .graph {
-    height: 100%;
-    width: auto;
+    width: 100%;
+    max-height: 975px;
     margin: auto;
-    border-style: solid;
-    border-width: 3px;
-    border-color: whitesmoke;
-    padding: 8px;
-    padding-left: 10px;
+
 }
 
 .graph-container {
-    background-color: whitesmoke;
-    height: 850px;
-    width: 100%;
-    margin: auto;
+    background-color: white;
+    width: 1575px;
+    height: 975px;
+    border-style: solid;
+    border-width: 4px;
+    border-color: var(--disney-dark-blue);
 }
 
 .graph-tab {
     font-family: Avenir;
     color: whitesmoke;
-    font-size: 24px;
-    margin: 10px 0px 10px 0px;
+    font-size: 20px;
+    margin: 4px 0px 4px 0px;
 }
