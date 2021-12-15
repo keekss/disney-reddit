@@ -58,3 +58,14 @@ http://localhost:8050/
 
 Alternatively, you can email <clark37@hawaii.edu> to schedule a viewing.
 
+### Docker Image
+
+The docker image creates a docker container that runs the applicaiton and jupyter notebook at the same time.  There is no software limit to the number of containers that can be run at the same time.  
+
+The container is built on a slim-python build and the neccesary python packages.  All of these required files are loaded automatically in to the container by the image.
+
+To retrieve the docker image enter ```docker pull fredstraub22/disney_datascience_analysis_app```in your terminal.
+Go to the directory with the docker-compose.yaml file, enter ```cd disney_datascience_analysis``` in your terminal.
+To start the docker container enter ```docker-compose-up``` in your terminal.
+Watch build output for the jupyter notebook link with token to access notebook. It will be something like http://127.0.0.1:8888?token...
+View app at http://127.0.0.1:8050/
