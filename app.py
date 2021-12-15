@@ -228,9 +228,7 @@ app.layout = dbc.Container(fluid = True, children = [
                 background = '#393F8F',
                 border = 'whitesmoke'
             ),
-            children = tab_containers,
-            vertical = True,
-            parent_style = dict(float = 'left')
+            children = tab_containers
         ),
         html.Div(id = 'tabs-content', style = dict(float = 'left'))
     ]),
