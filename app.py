@@ -8,8 +8,11 @@
 
 import pickle
 
-f = open('graphs.txt', 'rb')
-t = pickle.load(f)
+graphs = dict()
+    
+
+post_scores_file = open('graphs/post_scores.txt', 'rb')
+post_scores_graph = pickle.load(post_scores_file)
 
 import pandas as pd
 from pandas.core.base import SelectionMixin
@@ -55,7 +58,6 @@ app.layout = dbc.Container(fluid = True, children = [
         dbc.Row([
             dbc.Col(
                 html.Section([
-                    html.H1(t['a']),
                     html.H1(
                         'Disney Subreddit Visualizations',
                         id = 'main-title',
@@ -82,7 +84,7 @@ app.layout = dbc.Container(fluid = True, children = [
                                 target = "_blank"
                             ), style = dict(color = disney_dark_blue_hex),
                         ), width = 5),
-                    ], style = dict(paddingTop = '10px')),
+                    ], style = dict(paddingTop = '4px')),
                     html.H4(
                        
                     ),                    
@@ -168,176 +170,177 @@ def graph_container(image_file_path):
         className = 'graph-container'
     )
 
-tab_1 = graph_container('ticker_plot_dis.png')
+tab_1 = dbc.Row(post_scores_graph)
+# tab_1 = graph_container('ticker_plot_dis.png')
 
-tab_2 = graph_container('subreddit_post_scores.png')
+tab_2 = dbc.Row()
 
 tab_3 = graph_container('linear_regressions.png')
 
-tab_2 = dbc.Row(
-    html.Img(
-        src=app.get_asset_url('ticker_plot_dis.png'),
-        className = 'graph'
-    ),
-    className = 'graph-container'
-)
+# tab_2 = dbc.Row(
+#     html.Img(
+#         src=app.get_asset_url('ticker_plot_dis.png'),
+#         className = 'graph'
+#     ),
+#     className = 'graph-container'
+# )
 
-# Tab 2: Disneyland Ride Sentiments
+# # Tab 2: Disneyland Ride Sentiments
 
-from sklearn import preprocessing
-import folium
-import branca
-import branca.colormap as cm
+# from sklearn import preprocessing
+# import folium
+# import branca
+# import branca.colormap as cm
 
-df_rides = pd.read_csv("./sampleData/disneyland_rides_lat_long_w_sentiment.csv")
+# df_rides = pd.read_csv("./sampleData/disneyland_rides_lat_long_w_sentiment.csv")
 
-#create a map object
-map = folium.Map(location=[33.8121, -117.9190], zoom_start=18)
+# #create a map object
+# map = folium.Map(location=[33.8121, -117.9190], zoom_start=18)
 
-loc = 'Reddit sentiments shown by ride location, normalized between 0 and 1'
-title_html = '''
-             <h3 align="center" style="font-size:32px;font-family:Avenir"><b>{}</b></h3>
-             '''.format(loc) 
-map.get_root().html.add_child(folium.Element(title_html))
+# loc = 'Reddit sentiments shown by ride location, normalized between 0 and 1'
+# title_html = '''
+#              <h3 align="center" style="font-size:32px;font-family:Avenir"><b>{}</b></h3>
+#              '''.format(loc) 
+# map.get_root().html.add_child(folium.Element(title_html))
 
-#create a feature group
-fg = folium.FeatureGroup(name="Disneyland Attractions")
+# #create a feature group
+# fg = folium.FeatureGroup(name="Disneyland Attractions")
 
-#read in the data
-# data = pd.read_csv("disneyland_attractions.csv")
-data = df_rides
+# #read in the data
+# # data = pd.read_csv("disneyland_attractions.csv")
+# data = df_rides
 
-colormap = cm.LinearColormap(
-    colors=['red','green'],
-    index=[0,1],vmin=0,vmax=1
-)
+# colormap = cm.LinearColormap(
+#     colors=['red','green'],
+#     index=[0,1],vmin=0,vmax=1
+# )
 
-#iterate through the dataframe and add each attraction to the feature group
-for index, row in data.iterrows():
-    fg.add_child(folium.Marker(
-        location=[row["lat"], row["long"]], 
-        popup="{} : {}".format(row["ride"].upper(), round(row['sentiment'], 2)), 
-        icon=folium.Icon(color="black", icon_color=colormap(row['sentiment'])))
-    )
+# #iterate through the dataframe and add each attraction to the feature group
+# for index, row in data.iterrows():
+#     fg.add_child(folium.Marker(
+#         location=[row["lat"], row["long"]], 
+#         popup="{} : {}".format(row["ride"].upper(), round(row['sentiment'], 2)), 
+#         icon=folium.Icon(color="black", icon_color=colormap(row['sentiment'])))
+#     )
 
-map.add_child(colormap)
+# map.add_child(colormap)
     
-#add the feature group to the map
-map.add_child(fg)
+# #add the feature group to the map
+# map.add_child(fg)
 
-ride_map = map.save('ride_map.html')
+# ride_map = map.save('ride_map.html')
 
-ride_map_frame = html.Iframe(
-    id = 'ride_map',
-    srcDoc = open('ride_map.html', 'r').read(),
-    width = '100%',
-    height = '850'
-)
+# ride_map_frame = html.Iframe(
+#     id = 'ride_map',
+#     srcDoc = open('ride_map.html', 'r').read(),
+#     width = '100%',
+#     height = '850'
+# )
 
-tab_2 = dbc.Row([
-    ride_map_frame
-])
+# tab_2 = dbc.Row([
+#     ride_map_frame
+# ])
 
-# Tab 3A
-ps_df = pd.read_csv('sampleData/SMOOTHED_POST_SENTIMENT.csv')
-ps = ps_df['Sentiment']
-ps_dates = ps_df['Date']
+# # Tab 3A
+# ps_df = pd.read_csv('sampleData/SMOOTHED_POST_SENTIMENT.csv')
+# ps = ps_df['Sentiment']
+# ps_dates = ps_df['Date']
 
-pp_df = pd.read_csv('sampleData/POST_FINANCE.csv')
-pp_raw = pp_df['Close_Price']
-# Take natural log
-pp = np.log(pp_raw)
-pp_dates = pp_df['Date']
+# pp_df = pd.read_csv('sampleData/POST_FINANCE.csv')
+# pp_raw = pp_df['Close_Price']
+# # Take natural log
+# pp = np.log(pp_raw)
+# pp_dates = pp_df['Date']
 
-post_fig = make_subplots(specs=[[{"secondary_y": True}]])
+# post_fig = make_subplots(specs=[[{"secondary_y": True}]])
 
-post_fig.add_trace(
-    go.Scatter(
-        x = ps_dates,
-        y = ps,
-        name = 'Post Sentiment',
-    ),
-    secondary_y = False
-)
+# post_fig.add_trace(
+#     go.Scatter(
+#         x = ps_dates,
+#         y = ps,
+#         name = 'Post Sentiment',
+#     ),
+#     secondary_y = False
+# )
 
-post_fig.add_trace(
-    go.Scatter(
-        x = pp_dates,
-        y = pp,
-        name = 'Natural Log of Stock Price',
-    ),
-    secondary_y = True
-)
+# post_fig.add_trace(
+#     go.Scatter(
+#         x = pp_dates,
+#         y = pp,
+#         name = 'Natural Log of Stock Price',
+#     ),
+#     secondary_y = True
+# )
 
-post_fig.update_layout(
-    title_text = 'Post Sentiment & Stock Price vs. Time',
-    xaxis_title = 'Date',
-    title_x = 0.5,
-    height = 850,
-    yaxis_showgrid = False,
-    font = graph_font,
-)
+# post_fig.update_layout(
+#     title_text = 'Post Sentiment & Stock Price vs. Time',
+#     xaxis_title = 'Date',
+#     title_x = 0.5,
+#     height = 850,
+#     yaxis_showgrid = False,
+#     font = graph_font,
+# )
 
-post_fig.update_yaxes(
-    title_text='Sentiment (5 = Highest; 1 = Lowest)',
-    tickformat = ".2f", showgrid = False,
-    secondary_y=False,
-)
-post_fig.update_yaxes(title_text='Natural Log of Stock Price (USD)', tickformat = ".1f", showgrid = False, secondary_y=True,)
-
-
-tab_3a = dbc.Row([
-    dcc.Graph(figure = post_fig)
-])
-
-# Tab 3B
-cs_df = pd.read_csv('sampleData/SMOOTHED_COMMENT_SENTIMENT.csv')
-cs = cs_df['Sentiment']
-cs_dates = cs_df['Date']
-
-cp_df = pd.read_csv('sampleData/COMMENT_FINANCE.csv')
-cp_raw = cp_df['Price']
-# Take natural log
-cp = np.log(cp_raw)
-cp = np.round(cp, 2)
-cp_dates = cp_df['Date']
-
-comment_fig = make_subplots(specs=[[{"secondary_y": True}]])
-
-comment_fig.add_trace(
-    go.Scatter(
-        x = cs_dates,
-        y = cs,
-        name = 'Comment Sentiment',
-    ),
-    secondary_y = False
-)
-
-comment_fig.add_trace(
-    go.Scatter(
-        x = cp_dates,
-        y = cp,
-        name = 'Natural Log of Stock Price',
-    ),
-    secondary_y = True
-)
-
-comment_fig.update_layout(
-    title_text = 'Comment Sentiment & Stock Price vs. Time',
-    xaxis_title = 'Date',
-    title_x = 0.5,
-    height = 850,
-    yaxis_showgrid = False,
-    font = graph_font,
-)
-
-comment_fig.update_yaxes(title_text='Sentiment (5 = Highest; 1 = Lowest)', tickformat = ".2f", showgrid = False, secondary_y=False)
-comment_fig.update_yaxes(title_text='Natural Log of Stock Price (USD)', tickformat = ".1f", showgrid = False, secondary_y=True)
+# post_fig.update_yaxes(
+#     title_text='Sentiment (5 = Highest; 1 = Lowest)',
+#     tickformat = ".2f", showgrid = False,
+#     secondary_y=False,
+# )
+# post_fig.update_yaxes(title_text='Natural Log of Stock Price (USD)', tickformat = ".1f", showgrid = False, secondary_y=True,)
 
 
-tab_3b = dbc.Row([
-    dcc.Graph(figure = comment_fig)
-])
+# tab_3a = dbc.Row([
+#     dcc.Graph(figure = post_fig)
+# ])
+
+# # Tab 3B
+# cs_df = pd.read_csv('sampleData/SMOOTHED_COMMENT_SENTIMENT.csv')
+# cs = cs_df['Sentiment']
+# cs_dates = cs_df['Date']
+
+# cp_df = pd.read_csv('sampleData/COMMENT_FINANCE.csv')
+# cp_raw = cp_df['Price']
+# # Take natural log
+# cp = np.log(cp_raw)
+# cp = np.round(cp, 2)
+# cp_dates = cp_df['Date']
+
+# comment_fig = make_subplots(specs=[[{"secondary_y": True}]])
+
+# comment_fig.add_trace(
+#     go.Scatter(
+#         x = cs_dates,
+#         y = cs,
+#         name = 'Comment Sentiment',
+#     ),
+#     secondary_y = False
+# )
+
+# comment_fig.add_trace(
+#     go.Scatter(
+#         x = cp_dates,
+#         y = cp,
+#         name = 'Natural Log of Stock Price',
+#     ),
+#     secondary_y = True
+# )
+
+# comment_fig.update_layout(
+#     title_text = 'Comment Sentiment & Stock Price vs. Time',
+#     xaxis_title = 'Date',
+#     title_x = 0.5,
+#     height = 850,
+#     yaxis_showgrid = False,
+#     font = graph_font,
+# )
+
+# comment_fig.update_yaxes(title_text='Sentiment (5 = Highest; 1 = Lowest)', tickformat = ".2f", showgrid = False, secondary_y=False)
+# comment_fig.update_yaxes(title_text='Natural Log of Stock Price (USD)', tickformat = ".1f", showgrid = False, secondary_y=True)
+
+
+# tab_3b = dbc.Row([
+#     dcc.Graph(figure = comment_fig)
+# ])
 
 @app.callback(Output('tabs-content', 'children'),
               Input('tabs', 'value'))
