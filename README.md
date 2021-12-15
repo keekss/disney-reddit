@@ -20,6 +20,12 @@ the modified version of this that we used can be found [here](https://github.com
 
 [Google Doc](https://docs.google.com/document/d/1KjXD3TtvkG8EO8RG5Te5ZTCl0uc-ZWNRbF9h-VweEh4/edit)
 
+### Google Drive for Raw Data
+
+Only accessible by those with an @hawaii.edu
+
+[Google Drive](https://drive.google.com/drive/folders/1jhhzseiX2Qi78ElHTuxlTIhRogJp4CAS?usp=sharing)
+
 ### Plotly Website
 
 The results from the Reddit Sentiment and Stock Price notebook above has been included in a plotly website (coded in Python using Dash). We also included a bar graph depicting which Disney characters were discussed the most on the r/Disney subreddit, as well as an interactive map of Disneyland with each ride's sentiment (taken from r/Disneyland) being displayed. 
