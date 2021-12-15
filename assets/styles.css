@@ -57,12 +57,12 @@ Section {
 }
 
 .graph-container {
-    background-color: white;
-    width: 1575px;
-    height: 975px;
-    border-style: solid;
-    border-width: 4px;
-    border-color: var(--disney-dark-blue);
+    //background-color: white;
+    width: 75.8vw;
+    height: 40vw;
+    //border-style: solid;
+    //border-width: 4px;
+    //border-color: var(--disney-dark-blue);
 }
 
 .graph-tab {
