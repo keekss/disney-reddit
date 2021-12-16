@@ -1,10 +1,12 @@
-/* Custom Disney colors */
 :root {
+    /* Custom Disney colors */
     --disney-red: #B12228;
     --disney-pink: #F0BFB9;
     --disney-yellow: #F2CC63;
     --disney-dark-blue: #10194A;
     --disney-light-blue: #393F8F;
+    
+    --graph-height: 850px;
 }
 
 body {
@@ -51,18 +53,19 @@ Section {
 
 .graph {
     width: 100%;
-    max-height: 975px;
+    max-height: var(--graph-height);
     margin: auto;
 
 }
 
 .graph-container {
     background-color: white;
-    width: 90vw;
-    height: 975px;
-    border-style: solid;
+    margin: auto;
+    width: 96vw;
+    height: var(--graph-height);
+    /* border-style: solid;
     border-width: 4px;
-    border-color: var(--disney-dark-blue);
+    border-color: var(--disney-dark-blue); */
 }
 
 .graph-tab {

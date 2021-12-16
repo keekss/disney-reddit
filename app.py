@@ -83,10 +83,10 @@ tab_labels = [
     '3: Stock Prices vs. Time',
     '4: Post Scores vs. Time',
     '5: Number of Comments vs. Time',
-    '6a: Stock Prices vs. Post Scores',
-    '6b: Stock Prices vs. Number of Comments',
-    '7a: Stock Price vs. Post Sentiment',
-    '7b: Stock Price vs. Comment Sentiment',
+    '6a: Stock Price vs. Post Sentiment',
+    '6b: Stock Price vs. Comment Sentiment',
+    '7a: Stock Prices vs. Post Scores',
+    '7b: Stock Prices vs. Number of Comments',
 ]
 
 # Access tab content via dictionary with callback
@@ -96,10 +96,10 @@ tab_content = dict(
     stock_prices = fig_graph_container(stock_prices_fig),
     post_scores = fig_graph_container(post_scores_fig),
     comments = fig_graph_container(comments_fig),
-    stock_post_reg = image_graph_container('stock_post_reg.png'),
-    stock_comment_reg = image_graph_container('stock_comment_reg.png'),
     post_sentiment = fig_graph_container(post_sentiment_fig),
     comment_sentiment = fig_graph_container(comment_sentiment_fig),
+    stock_post_reg = image_graph_container('stock_post_linreg.png'),
+    stock_comment_reg = image_graph_container('stock_comment_linreg.png'),
 )
 
 # Package each tab in a dcc.Tab
@@ -230,7 +230,7 @@ app.layout = dbc.Container(fluid = True, children = [
             ),
             children = tab_containers
         ),
-        html.Div(id = 'tabs-content', style = dict(float = 'left'))
+        html.Div(id = 'tabs-content')
     ]),
 ])
 
