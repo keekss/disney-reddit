@@ -3,7 +3,7 @@
 ### Reddit Sentiment and Stock Price
 
 The first part of this project is a python notebook consisting of a pipeline to get content from Reddit and the stock market, perform linear regression on the content, perform sentiment 
-analysis on the content, then graph the two datasets. This notebook is fairly robust - each process takes in an iput file and writes to an output 
+analysis on the content, then graph the two datasets. This notebook is fairly robust - each process takes in an input file and writes to an output 
 file, allowing you to enter the pipeline at any point and checkpoint as you go. 
 
 All of the necessary code for this can be found in [this notebook](https://github.com/keekss/disney-reddit/blob/master/project_writeup.ipynb), 
