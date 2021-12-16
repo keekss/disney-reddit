@@ -73,7 +73,7 @@ git clone https://github.com/fredstraub/ICS-438-Final-Dockerfile.git
 Go to the directory with the docker-compose.yaml file, in your terminal enter
 
 ```
-cd disney_datascience_analysis
+cd ICS-438-Final-Dockerfile/disney_datascience_analysis
 ```
 
 To start the docker container in your terminal enter
